@@ -1,0 +1,59 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/dbgirl
+    username: root
+    password: 123456
+#    jndi-name: java:jboss/datasources/customers  连接JNDI数据源
+#当你将应用部署于应用服务器上的时候想让数据源由应用服务器管理，那么可以使用如下配置方式引入JNDI数据源。
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    #springboot 集成 mail
+  mail:
+    host: smtp.163.com #邮箱服务器地址
+    username: caoxingyun0816@163.com # 个人163邮箱
+    password: cxydy940816 #开启授权后的密码
+    default-encoding: utf-8
+    port: 25 # 端口号，要自己指定
+    protocol: smtp # 协议号
+  http:   #文件上传
+    multipart:
+      enabled: true #默认支持文件上传.
+      file-size-threshold: #支持文件写入磁盘.
+      #location: D:\workspace\cxy-admin\upload\ #默认路径
+      #max-file-size: 1mb #最大上传size
+      #max-request-size: 10Mb # 最大支持请求大小
+
+mail:
+  fromMail:
+    url: caoxingyun0816@163.com  #以谁来发送邮件
+image:
+  savePath: D:\workspace\cxy-admin\upload\
+
+logging:
+  file: ./logs/logback.log  #指定输出文件路径
+  #level: com.imooc.controller warn
+  #path: /var/log
+  #level: info
+
+mybatis:
+  type-aliases-package: com.imooc.entity # 对应的实体的包
+  #mapper-locations: classpath:mapper/*.xml #mapper.xml 所在位置 使用XML形式的时候加该属性
+  #config-locations: classpath:mybatis/mybatis-config.xml  使用XML形式的时候加该属性
+#  如何选择
+#  两种模式各有特点，注解版适合简单快速的模式，其实像现在流行的这种微服务模式，一个微服务就会对应一个自已的数据库，多表连接查询的需求会大大的降低，会越来越适合这种模式。
+#
+#  老传统模式比适合大型项目，可以灵活的动态生成SQL，方便调整SQL，也有痛痛快快，洋洋洒洒的写SQL的感觉。
+
+didspance:
+  blog:
+   randomString: ${random.value} #随机字符串
+   randomInt: ${random.int} #随机int
+   randomLong: ${random.long}
+   randomS: ${random.int(10)} # 10以内的随机数
+   randomsbet: ${random.int(10,20)} #10-20的随机数
+   randomUUid: ${random.uuid} #uuid

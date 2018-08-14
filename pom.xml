@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.cxy</groupId>
+	<artifactId>cxy-admin</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<!--部署到外部TOMCAT用war打包-->
+	<!--<packaging>war</packaging>-->
+	<packaging>jar</packaging>
+
+	<name>cxy-admin</name>
+	<description>Demo project for Spring Boot</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.1.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+	<!--阿里仓库-->
+	<repositories>
+		<repository>
+			<id>local_repo</id>
+			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+			<snapshots>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+		</repository>
+	</repositories>
+	<dependencies>
+		<!--&lt;!&ndash;使用外部Tomcat&ndash;&gt;-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
+			<!--<scope>compile</scope>-->
+		<!--</dependency>-->
+		<!--SpringBoot admin-->
+		<!--<dependency>-->
+			<!--<groupId>de.codecentric</groupId>-->
+			<!--<artifactId>spring-boot-admin-server</artifactId>-->
+			<!--<version>1.5.6</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>de.codecentric</groupId>-->
+			<!--<artifactId>spring-boot-admin-server-ui</artifactId>-->
+			<!--<version>1.5.6</version>-->
+		<!--</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+		<!--thymeleaf 模板，解析返回的视图 这个是HTML的 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!--swagger RESTFul Api 文档 -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<!--spring boot 的热部署 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional><!--spring boot 的热部署  true 为打开热部署-->
+		</dependency>
+		<!-- 安全-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<!--没有结束符的HTML5标签解析出错的解决办法 -->
+			<!-- 配置spring.thymeleaf.mode =LEGACYHTML5 -->
+			<!--LEGACYHTML5需要搭配一个额外的库NekoHTML才可用 -->
+		<groupId>net.sourceforge.nekohtml</groupId>
+		<artifactId>nekohtml</artifactId>
+		<version>1.9.22</version>
+		</dependency>
+		<!--jdbc-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<!--嵌入式数据库支持-->
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!--MySQL连接的依赖包-->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.41</version>
+		</dependency>
+		<!--mybatis-->
+		<!--这里不引入spring-boot-starter-jdbc依赖，是由于mybatis-spring-boot-starter中已经包含了此依赖-->
+		<!--MyBatis-Spring-Boot-Starter依赖将会提供如下：
+			自动检测现有的DataSource
+			将创建并注册SqlSessionFactory的实例，该实例使用SqlSessionFactoryBean将该DataSource作为输入进行传递
+			将创建并注册从SqlSessionFactory中获取的SqlSessionTemplate的实例。
+			自动扫描您的mappers，将它们链接到SqlSessionTemplate并将其注册到Spring上下文，以便将它们注入到您的bean中。
+			就是说，使用了该Starter之后，只需要定义一个DataSource即可（application.properties中可配置），
+			它会自动创建使用该DataSource的SqlSessionFactoryBean以及SqlSessionTemplate。会自动扫描你的Mappers，连接到SqlSessionTemplate，并注册到Spring上下文中。
+		-->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+		<!--Spring Boot默认使用tomcat-jdbc数据源，如果你想使用其他的数据源，
+		比如这里使用了阿里巴巴的数据池管理,除了在application.properties配置数据源之外，
+		你应该额外添加以下依赖：-->
+		<!--阿里巴巴数据池-->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.0.9</version>
+		</dependency>
+		<!--物理分页-->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20131018</version>
+        </dependency>
+		<!--freemarker 模板引擎 当版本过低的时候，可能与SpringBoot中的版本不对应，导致报错
+		Error creating bean with name 'FreeMarkerConfigurer'-->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.28</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient -->
+		<!---->
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<!--org.apache.commons.httpclient.HttpClient  与org.apache.http.client.HttpClient的区别 -->
+		<!--Commons的HttpClient项目现在是生命的尽头，不再被开发,已被Apache HttpComponents项目HttpClient和的HttpCore模组取代，提供更好的性能和更大的灵活性。  -->
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.3</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-digester3 -->
+		<!--解析XML-->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-digester3</artifactId>
+			<version>3.2</version>
+		</dependency>
+
+		<!--SpringBoot 默认使用Jackson 解析json-->
+		<!--&lt;!&ndash;对象转json、json转对象是我们开发过程中经常遇到的，提取一套高效、易用的工具类会让开发过程舒爽不少，-->
+		<!--com.alibaba.fastjson.JSONObject依赖代码-->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.28</version>
+		</dependency>
+
+		<!--net.sf.json.JSONObject依赖代码-->
+		<!-- JSONObject对象依赖的jar包 -->
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.ezmorph</groupId>
+			<artifactId>ezmorph</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.2.3</version>
+			<classifier>jdk15</classifier><!-- 指定jdk版本 -->
+		</dependency>
+		<!-- Json依赖架包下载 -->
+
+		<!--一个基于jackson包的常用json工具方法。-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+
+		<!-- Spring Boot使用的是1.4（包括1.4版本）之前的版本使用如下配置 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-redis</artifactId>
+		</dependency>
+		<!-- 1.5.* 的版本需要指定版本号 -->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-redis</artifactId>-->
+			<!--<version>1.4.6.RELEASE</version>-->
+		<!--</dependency>-->
+		<!--&lt;!&ndash; 2.* 版本 redis依赖改名了,直接使用下面的依赖 &ndash;&gt;-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-data-redis</artifactId>-->
+		<!--</dependency>-->
+		<!--邮件依赖-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<!--actuator 检查程序运行情况依赖-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<!--连接Actuator的远程shell -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-remote-shell</artifactId>
+		</dependency>
+		<!--servlet-->
+		<!--<dependency>-->
+			<!--<groupId>javax.servlet</groupId>-->
+			<!--<artifactId>servlet-api</artifactId>-->
+			<!--<version>2.5</version>-->
+		<!--</dependency>-->
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+		<!--打包名称-->
+		<finalName>cxy-admin</finalName>
+	</build>
+</project>

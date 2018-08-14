@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!--通过mapper标签中的namespace属性指定对应的dao映射-->
+<mapper namespace="com.imooc.repository.UserMapper">
+    <!--xml配置方式保持映射文件的老传统，优化主要体现在不需要实现dao的是实现层，系统会自动根据方法名在映射文件中找对应的sql-->
+
+    <!--&lt;!&ndash;resultMap 映射&ndash;&gt;-->
+    <!--<resultMap id="baseResultMap" type="com.imooc.entity.User">-->
+        <!--<id column="id" property="id" jdbcType="INT"  />-->
+        <!--<result column="username" property="username" jdbcType="VARCHAR"/>-->
+        <!--<result column="password" property="password" jdbcType="VARCHAR"/>-->
+        <!--<result column="age" property="age" jdbcType="INT"/>-->
+        <!--<result column="role_id" property="roleId" jdbcType="INT"/>-->
+    <!--</resultMap>-->
+
+    <sql id="baseColumnList" >
+        id, age, password,role_id,username
+    </sql>
+
+    <update id="update" parameterType="com.imooc.entity.User" >
+        UPDATE `user` SET username = #{username}WHERE id = #{id}
+    </update>
+
+
+    <!--<select id="queryUserlistByParams" resultMap="baseResultMap" parameterType="java.util.HashMap">-->
+        <!--select-->
+        <!--<include refid="baseColumnList" />-->
+        <!--from `user`-->
+        <!--<where>-->
+            <!--1 = 1-->
+            <!--<if test="username!= null and username !=''">-->
+                <!--AND author like CONCAT(CONCAT('%',#{username,jdbcType=VARCHAR}),'%')-->
+            <!--</if>-->
+            <!--<if test="password != null and password !=''">-->
+                <!--AND title like  CONCAT(CONCAT('%',#{password,jdbcType=VARCHAR}),'%')-->
+            <!--</if>-->
+
+        <!--</where>-->
+    <!--</select>-->
+
+    <!--<select id="queryUserById"  resultMap="baseResultMap" parameterType="java.lang.Integer">-->
+        <!--SELECT-->
+        <!--<include refid="baseColumnList" />-->
+        <!--FROM `user`-->
+        <!--WHERE id = #{id}-->
+    <!--</select>-->
+
+    <!--<insert id="add" parameterType="com.imooc.entity.User" >-->
+        <!--INSERT INTO `user` (id, age, password,role_id,username) VALUES (#{id}, #{age}, #{password},#{roleId},#{username})-->
+    <!--</insert>-->
+
+
+    <!--<delete id="deleteByIds" parameterType="java.lang.String" >-->
+        <!--DELETE FROM `user` WHERE id in-->
+        <!--<foreach item="idItem" collection="array" open="(" separator="," close=")">-->
+            <!--#{idItem}-->
+        <!--</foreach>-->
+    <!--</delete>-->
+</mapper>

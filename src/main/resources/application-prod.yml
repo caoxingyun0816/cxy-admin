@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+#Thymeleaf的默认参数配置
+spring:
+  thymeleaf:
+    cache: true #缓存
+    check-template: true #检查模板位置是否存在
+    content-type: application/json #Content-Type value.
+    enabled: true #启用MVC Thymeleaf视图解析。
+    prefix: classpath:/templates/ #在构建URL时的前缀
+    suffix: .login #在构建URL时的后缀
+    # 默认值为 classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+  resources:
+    static-locations: # 默认值为 classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+
+#log
+logging:
+    config: classpath:config/logback-spring.xml
+    path: /workspace/springbootgirl/girl/log

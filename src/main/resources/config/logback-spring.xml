@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--spring boot默认使用logback做为日志框架，如果你想使用其他日志系统，可以在application.properties
+使用org.springframework.boot.logging.LoggingSystem 来切换日志系统框架或者直接把value设置为none来禁止日志系统框架
+这里我们用spring boot默认的Logback日志框架，要使用自定义配置，只要定好xml文件，
+然后按约定命名，如logback-spring.xml, logback-spring.groovy, logback.xml或者logback.groovy，
+放于classpath的根目录下或者，或者直接通过在application.properties配置文件中通过logging.config来指定具体的路径-->
+<!--a. scan,当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
+b. scanPeriod,设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。
+当scan为true时，此属性生效。默认的时间间隔为1分钟。
+c. debug,当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。-->
+<congfiguration scan="true" scanPeriod="300 seconds">
+    <!-- 日志级别 -->
+    <property name="logLevel" value="INFO"></property>
+    <!-- 日志地址 -->
+    <property name="logPath" value="./logs"></property>
+    <!--最大保存时间-->
+    <property name="maxHistory" value="10"></property>
+    <!-- 异步缓冲队列的深度,该值会影响性能.默认值为256 ?-->
+    <property name="queueSize" value="512"></property>
+    <!-- 控制台打印日志的相关配置 -->
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <!-- 日志格式 -->
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+            </encoder>
+        </appender>
+    <!-- 文件保存日志的相关配置，同步 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 保存日志文件的路径 -->
+        <file>${logPath}/cms.log</file>
+        <!-- 日志格式 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+        </encoder>
+        <!--分环境部署？-->
+        <!--<springProfile name="dev">-->
+            <!--<fileNamePattern>/logs/dev/myconfig.%d{yyyy-MM-dd}.log</fileNamePattern>-->
+        <!--</springProfile>-->
+        <!--<springProfile name="prod">-->
+            <!--<fileNamePattern>/logs/prod/myconfig.%d{yyyy-MM-dd}.log</fileNamePattern>-->
+        <!--</springProfile>-->
+        <!--日志过滤器可以自定义-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>${logLevel}</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+            <!--filter中的onMismatch标签只能在依赖logback，如果一代log4j或者log4j2则会报错。-->
+        </filter>
+        <!-- 循环政策：基于时间创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${logPath}/cms-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 最大保存时间-->
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+
+    <!--配置mybatis sql 日志-->
+    <logger name="com.pf.org.cms.mapper" level="DEBUG"/>
+    <!-- 基于INFO处理日志：具体控制台或者文件对日志级别的处理还要看所在appender配置的filter，如果没有配置filter，则使用root配置 -->
+    <root level="${logLevel}">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+    <!--首先配置多个appender标签，分别记录不同级别的日志内容。
+    appender相当于一个日志执行块，在配置的root节点和logger节点中加载这些appender即可实现输出配置的多种日志。
+    logger继承root，类似java的继承，logger中定义的级别，会覆盖root中的级别。
+    logger中的name="com.lat.theonex.mybatis.dao"  意为此logger管理的代码范围，类似于spring的扫包。-->
+</congfiguration>

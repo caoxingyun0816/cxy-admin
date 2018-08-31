@@ -22,7 +22,9 @@ public class GirlServiceTest {
 
     @Test
     public void findOneTest() {
-        Girl girl = girlService.findOne(73);
-        Assert.assertEquals(new Integer(13), girl.getAge());
+        Integer a = null;
+        if(a !=1 ){
+            System.out.println(a);
+        }
     }
 }

@@ -21,7 +21,7 @@ public class HttpAspect {
 
     private final static Logger logger = LoggerFactory.getLogger(HttpAspect.class);
 
-    //切点，线面可以直接引用
+    //切点，切面可以直接引用
     @Pointcut("execution(public * com.imooc.controller.test.GirlController.*(..))")
     public void log() {
     }

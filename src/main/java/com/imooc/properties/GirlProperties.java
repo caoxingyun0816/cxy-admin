@@ -3,6 +3,8 @@ package com.imooc.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 /**
  * Created by caoxingyun
  * 2018-07-18 23:35
@@ -14,6 +16,8 @@ public class GirlProperties {
     private String cupSize;
 
     private Integer age;
+
+    private Date date;
 
     public String getCupSize() {
         return cupSize;

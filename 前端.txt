@@ -1,0 +1,177 @@
+1.前端展示
+1)编辑删除，等操作，可以用modal框。
+
+2)一条信息，双击展示详情页，可以用一个div不展示，双击事件时 js load函数发送ajax请求。
+div加载详情页，并用 slideToggle 将div展示出来。
+
+3)jqgrid 
+jqgrid 表格插件，前端定义好对应的div 和 table 即可。
+js中用jqgrid加载数据。发送ajax请求，
+可以设置首次不加载数据。
+1. 首次加载时候设置 jqGrid 属性 datatype: 'local'
+$("#grid").jqGrid({  
+    url:"#",  
+    datatype:"local",  
+    //其他的操作
+}); 
+2.需要加载数据时，把属性datatype: 设置为json或者XML 即可
+ $("#NF-search").click(function () {
+         $gridList.jqGrid(
+           'setGridParam', {
+                datatype: 'json'  
+          }).trigger('reloadGrid');
+});
+
+同样可以在modal框中定义table，打开modal框时，加载数据（第一次不加载，点击数据触发时，重新加载）
+//先发送加载数据的请求，在展示modal框
+function showSubContenEvt(id){
+	var rowData = $("#grid-table-dbgl").getRowData(id);
+	$("#grid-table-subcontent").jqGrid('setGridParam',{
+		datatype:"json",
+		postData:{"contentId":rowData.contentId},
+	}).trigger("reloadGrid");
+	$("#subContentModal").modal("show");
+}。
+
+4)系统中的返回信息等，用enumeration定义好，统一管理。
+也可以用国际化资源管理，在jsp界面用<input type="hidden" id="myApplyencodingStatus14" value="<fmt:message key="asset.myapply.encodingStatus14"/>"/>获取。
+
+5）权限管理，自定义标签，对应要控制的资源路径，加上标签，然后对该用户拥有的权限校验，如果有该路径的权限就展示，达到控制不同权限显示不同内容的效果。
+
+6)对于图片视频资源，一定要拼接出正确的路径。window.open 打开新窗口，自己写好img，video 并对应src，就可以加载视频和图片。
+
+7）对于配置项，经常修改的配置，不要写在代码中，可以放在配置文件中或缓存中。
+
+8)日志记录，日志表，记录当前账号的每次操作，可以在每次进行业务操作的时候，插入表中，但是这样做，代码严重耦合，重复。可以用spring aop 面向切面编程。
+在执行方法时，加入日志。或者用过滤器或拦截器也能实现。
+操作记录 也就是日志咯，用时间排序，查询时用对象id，userID。在日志表中查询按时间排序即可。
+
+9)数据统计，echarts 插件，获得后台传回的数据，将数据用表格展示出来。主要是数据的获取。
+echarts 样例
+function initmyapplication() {
+    //我的申请表 myapplicachar
+    var sh = $("#myapplicachar");
+    if (sh.length == 0) {
+        return;
+    }
+    $.ajax({
+        type: "post",
+        url: __webroot__ + "other/initmyapplication.htm",
+        dataType: "json",
+        cache: false,
+        success: function (data) {
+        	var dd = data;
+         // 使用
+            require(
+                [
+                    'echarts',
+                    'echarts/chart/line',
+                    'echarts/chart/bar'
+                ],
+                function (echarts) {
+                    var myapplication = echarts.init(document.getElementById('myapplicachar'));
+                    var myappoption = {
+                        title: {
+                            text: $("#index-app-text").val(),//组织申请数
+                            subtext: $("#index-subtext").val(),//按类型
+                            x: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                            },
+                            backgroundColor: "rgb(153,153,153)",
+                            borderWidth: 1,
+                            borderColor: "rgb(51,51,51)",
+                            textStyle: {
+                                color: "rgb(255,255,255)",
+                                fontStyle: "oblique"
+                            }
+                        },
+                        legend: {
+                            orient: 'vertical', //布局方式，默认为水平布局，可选为：'horizontal' | 'vertical'
+                            x: 'left',
+                            padding: [0, 0, 5, 0],
+                            itemGap: 5,
+                            itemWidth: 10,
+                            data: [$("#index-demand").val(), $("#index-live").val(), $("#index-copyright").val(), $("#index-star").val(), $("#index-award").val()]    //['点播','直播', '版权','人物','奖项']
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                mark: {show: false},
+                                dataView: {show: false, readOnly: true},
+                                magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        calculable: true,
+                        yAxis: [
+                            {
+                                type: 'value',
+                                name: $("#index-number").val()
+                            }
+                        ],
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: getweek()
+                            }
+                        ],
+                        series: [
+                            {
+                                name: $("#index-demand").val(),//点播
+                                type: 'bar',
+                                stack: $("#index-sum").val(),//总量
+                                //itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+                                data: getdata(dd.demand),
+                                barCategoryGap: '50%'
+                            },
+                            {
+                                name: $("#index-live").val(),//直播
+                                type: 'bar',
+                                stack: $("#index-sum").val(),//总量
+                                //itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+                                data: getdata(dd.live),
+                                barCategoryGap: '50%'
+                            },
+                            {
+                                name: $("#index-copyright").val(),//版权
+                                type: 'bar',
+                                stack: $("#index-sum").val(),//总量
+                                //itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+                                data: getdata(dd.copyright),
+                                barCategoryGap: '50%'
+                            },
+                            {
+                                name: $("#index-star").val(),//人物
+                                type: 'bar',
+                                stack: $("#index-sum").val(),//总量
+                                data: getdata(dd.star),
+                                barCategoryGap: '50%'
+                            },
+                            {
+                                name: $("#index-award").val(),//奖项
+                                type: 'bar',
+                                stack: $("#index-sum").val(),//总量
+                                data: getdata(dd.award),
+                                barCategoryGap: '50%'
+                            }
+                        ]
+                    };
+
+                    // 为echarts对象加载数据
+                    myapplication.setOption(myappoption);
+                });
+        },
+        Error: function (err) {
+            console.log("error");
+        }
+    });
+    
+}
+
+
+10）根据后台的数据动态展示。主要涉及css样式。自己手动添加dom元素和对应事件。

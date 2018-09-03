@@ -255,11 +255,17 @@
 			<version>1.9.13</version>
 		</dependency>
 
-		<!-- Spring Boot使用的是1.4（包括1.4版本）之前的版本使用如下配置 -->
+		<!-- Spring Boot使用的是1.4（包括1.4版本）之前的版本使用如下配置 redis -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-redis</artifactId>
 		</dependency>
+		<!--redis依赖-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-data-redis</artifactId>-->
+		<!--</dependency>-->
+
 		<!-- 1.5.* 的版本需要指定版本号 -->
 		<!--<dependency>-->
 			<!--<groupId>org.springframework.boot</groupId>-->

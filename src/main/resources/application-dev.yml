@@ -9,14 +9,42 @@ spring:
     #suffix: .login
   devtools:
     restart:
-      enabled: true #开启热部署
-      #additional-paths: src/main/java #监听的目录
-     # exclude:  /static/**,/templates/** # 排除目录
-      #trigger-file: .trigger # 触发文件，只有在改文件修改时才触发重启
-   # livereload:
-     # enabled: false #禁止自动刷新
-    #remote:
-     # secret: myappsecret #远程开发
+      enabled: true
+      #开启热部署
+            #additional-paths: src/main/java #监听的目录
+           # exclude:  /static/**,/templates/** # 排除目录
+            #trigger-file: .trigger # 触发文件，只有在改文件修改时才触发重启
+         # livereload:
+           # enabled: false #禁止自动刷新
+          #remote:
+           # secret: myappsecret #远程开发
+  redis:
+  #redis 数据库索引
+    database: 0
+    #host
+    host: 127.0.0.1
+    #端口号
+    port: 6379
+    password:
+    #连接池最大数量（使用负值表示没有限制）
+    pool:
+      max-active: 1000
+      #连接池最大等待时间（使用负值表示没有限制）
+      max-wait: -1
+      #连接池最大空闲数量（使用负值表示没有限制）
+      max-idle: 8
+      #连接池最小空闲连接（使用负值表示没有限制）
+      min-idle: 1
+      #超时时间(毫秒)
+    timeout: 0
+    #redis集群配置
+   # cluster:
+    #  nodes: 192.168.177.128:7001,192.168.177.128:7002,192.168.177.128:7003,192.168.177.128:7004,192.168.177.128:7005,192.168.177.128:7006
+    #cluster:
+     # nodes:
+    #spring.redis.cluster.max-redirects=3
+
+
 
 #如果你只想打开一两个端点，那就先禁用全部端点，然后启用那几个你要的
 endpoints:

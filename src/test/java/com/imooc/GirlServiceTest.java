@@ -2,6 +2,7 @@ package com.imooc;
 
 import com.imooc.domain.Girl;
 import com.imooc.service.girl.GirlService;
+import com.imooc.utils.FileUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,10 +22,7 @@ public class GirlServiceTest {
     private GirlService girlService;
 
     @Test
-    public void findOneTest() {
-        Integer a = null;
-        if(a !=1 ){
-            System.out.println(a);
-        }
+    public void findOneTest() throws Exception {
+        FileUtil.moveFile("D:/test/a.txt","D:/test/a","a.txt");
     }
 }

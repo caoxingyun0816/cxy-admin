@@ -23,6 +23,6 @@ public class GirlServiceTest {
 
     @Test
     public void findOneTest() throws Exception {
-        FileUtil.moveFile("D:/test/a.txt","D:/test/a","a.txt");
+        //FileUtil.moveFile("D:/test/a.txt","D:/test/a","a.txt");
     }
 }

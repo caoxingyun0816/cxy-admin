@@ -1,0 +1,87 @@
+一张表通过一个ID和parentID构建的三级分类的查询 使用连接查询
+egg
+VALUES
+(110000,'北京',0),
+(110100,'北京市',110000),
+(110101,'东城',110100),
+(110102,'西城',110100),
+
+北京
+	北京市
+		东城
+		西城
+
+一级
+select a.* from region a where a.parent_code = '0' and a.del = 0;
+二级
+SELECT a.* FROM region a  join region b on a.parent_code = b.code and b.parent_code = '0' where a.del = 0；
+三级
+SELECT a.* FROM region a  join region b  join region c on a.parent_code = b.code and b.parent_code = c.code and c.parent_code= '0' where  c.del = 0;
+
+Region 是表基本信息
+
+返回list的处理
+public class RegionProvinceVO extends Region{
+    private List<RegionCityVO> regionCitys;
+}
+
+
+public class RegionCityVO extends Region {
+    private List<RegionDistinctVO> regionDistincts;
+}
+
+public class RegionDistinctVO extends Region {
+}
+
+ @Override
+    public ResponseVO<List<RegionProvinceVO>> getAllRegion() {
+        //省
+        List<Region> provinces = regionMapper.getProvinces();
+        //市
+        List<Region> citys = regionMapper.getCitys();
+        //区
+        List<Region> distincts = regionMapper.getDistincts();
+        //省
+        List<RegionProvinceVO> regionProvinceVOS = new ArrayList<>();
+        //市
+        Map<String,List<RegionCityVO>> regionCityVOS = new HashMap<>();
+        //区
+        Map<String,List<RegionDistinctVO>> regionDistinctVOS = new HashMap<>();
+
+        for (Region city:citys) {
+            RegionCityVO cityVO = dozerMapper.map(city, RegionCityVO.class);
+            if(regionCityVOS.containsKey(cityVO.getParentCode())){
+                regionCityVOS.get(city.getParentCode()).add(cityVO);
+            }else{
+                List<RegionCityVO> cityVOS = new ArrayList<>();
+                cityVOS.add(cityVO);
+                regionCityVOS.put(cityVO.getParentCode(),cityVOS);
+            }
+        }
+
+        for (Region distinct:distincts) {
+            RegionDistinctVO distinctVO = dozerMapper.map(distinct, RegionDistinctVO.class);
+            if(regionDistinctVOS.containsKey(distinctVO.getParentCode())){
+                regionDistinctVOS.get(distinct.getParentCode()).add(distinctVO);
+            }else{
+                List<RegionDistinctVO> distinctVOS = new ArrayList<>();
+                distinctVOS.add(distinctVO);
+                regionDistinctVOS.put(distinctVO.getParentCode(),distinctVOS);
+            }
+        }
+
+        for(Region province:provinces){
+            RegionProvinceVO regionProvinceVO = dozerMapper.map(province, RegionProvinceVO.class);
+            List<RegionCityVO> regionCityVO = regionCityVOS.get(regionProvinceVO.getCode());
+            if(regionCityVO != null && regionCityVO.size() > 0){
+                for(RegionCityVO regionCity:regionCityVO){
+                    List<RegionDistinctVO> distinctVOS = regionDistinctVOS.get(regionCity.getCode());
+                    regionCity.setRegionDistincts(distinctVOS);
+                }
+            }
+            regionProvinceVO.setRegionCitys(regionCityVO);
+            regionProvinceVOS.add(regionProvinceVO);
+
+        }
+        return ResponseUtil.ok(regionProvinceVOS);
+    }

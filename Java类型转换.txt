@@ -1,0 +1,156 @@
+1.Java 类型转换
+强制类型转换的本质是：大空间存储的数据转换为小空间存储的数据，或小空间存储的数据转换为大空间转换的数据
+java进行强制类型转换注意问题：
+double float类型的值 转换为long int short byte char 类开的值 ，会造成精度丢失
+
+byte 类型的数据，只有一字节的内存空间，只能保存-128~127 之间的数据，
+					如果一个long l = 100;在进行强制转换时，因为100是在byte的取值范围的，所以强制转换为byte后，得到的值为 100
+					如果一个long l = 128;在强制转换时，因超出了byte存储空间的最大值，它就会像一个圆盘一个，超了最大的值，就会取此类型的最小值，-128，如果值129，转换后，得到的值为127
+					强制转换出现负数后得到的值 ，请参考强制转换-圆盘
+
+		
+在Java中整型、实型、字符型被视为简单数据类型，这些类型由低级到高级分别为(byte，short，char)--int--long--float--double
+
+自动类型转换
+低级变量可以直接转换为高级变量，低-->高 精度不会丢失
+byte b;
+int i=b;
+long l=b;
+float f=b;
+double d=b;
+
+将高级变量转换为低级变量时，强制类型转换 高-->低 精度会丢失
+
+int i=99;
+byte b=(byte)i;
+char c=(char)i;
+
+float f=(float)i;
+double d = (double)f;
+可以想象，这种转换肯定可能会导致溢出或精度的下降。
+
+3包装类过渡类型转换
+   在我们讨论其它变量类型之间的相互转换时，我们需要了解一下Java的包装类，所谓包装类，就是可以直接将简单类型的变量表示为一个类，在执行变量类型的相互转换时，我们会大量使用这些包装类。Java共有六个包装类，分别是Boolean、Character、Integer、Long、Float和Double，从字面上我们就可以看出它们分别对应于 boolean、char、int、long、float和double。而String和Date本身就是类。所以也就不存在什么包装类的概念了。
+   在进行简单数据类型之间的转换（自动转换或强制转换）时，我们总是可以利用包装类进行中间过渡。
+   一般情况下，我们首先声明一个变量，然后生成一个对应的包装类，就可以利用包装类的各种方法进行类型转换了。例如：
+  
+
+例1，当希望把float型转换为double型时：
+  float f1=100.00f;
+  Float F1=new float(f1);
+  Double d1=F1.doubleValue();
+//F1.doubleValue()为Float类的返回double值型的方法
+
+    当希望把double型转换为int型时：
+
+  double d1=100.00; 
+  Double D1=new Double(d1);
+  int i1=D1.intValue();
+
+  当希望把int型转换为double型时，自动转换：
+
+    int i1=200;
+    double d1=i1;
+
+  简单类型的变量转换为相应的包装类，可以利用包装类的构造函数。即：
+Boolean(boolean value)、Character(char value)、Integer(int value)、Long(long value)、Float(float value)、Double(double value)
+而在各个包装类中，总有形为××Value()的方法，来得到其对应的简单类型数据。利用这种方法，也可以实现不同数值型变量间的转换，例如，对于一个双精度实型类，intValue()可以得到其对应的整型变量，而doubleValue()可以得到其对应的双精度实型变量。
+
+		int a = 100;
+        double b = a;  低到高 自动转换
+        double c = 5.234; 
+        float d = (float) c; 高到低 强制转换
+        float e = new Double(b).floatValue();  利用包装类型转换 而在各个包装类中，总有形为××Value()的方法，来得到其对应的简单类型数据。
+
+包装类转换成字符串 基本类型转换成字符串
+包装类的tostring()方法
+int i1=10;
+float f1=3.14f;
+double d1=3.1415926;
+Integer I1=new Integer(i1);
+//生成Integer类r
+Float F1=new Float(f1);
+//生成Float类r
+Double D1=new Double(d1);
+//生成Double类r
+//分别调用包装类的toString()方法转换为字符串
+String si1=I1.toString();
+String sf1=F1.toString();
+String sd1=D1.toString();
+
+1 字符串转换成数据
+字符串转换成整数：
+
+ 
+String MyNumber ="1234";
+int MyInt = Integer.parseInt(MyNumber);
+
+字符串转换成byte, short, int, float, double, long等数据类型，可以分别参考Byte, Short, Integer, Float, Double, Long类的parseXXX方法。
+
+
+基本类型和基本类型的转换
+1.自动转换和强制装换
+低级到高级分别为(byte，short，char)--int--long--float--double
+自动转换  低-->高 不丢失精度
+int a = 6;
+float b = a;
+
+强制转换 高-->低 丢失精度 不推荐
+float c = 2.3f;
+int d = (int)c;
+
+2.对应的包装类来实现
+基本类型转换成其他基本类型和字符串，都可以用包装类型。
+在各个包装类中，总有形为××Value()的方法，来得到其对应的简单类型数据。
+ float f1=100.00f;
+  Float F1=new float(f1);
+  Double d1=F1.doubleValue();
+//F1.doubleValue()为Float类的返回double值型的方法
+
+    当希望把double型转换为int型时：
+
+  double d1=100.00; 
+  Double D1=new Double(d1);
+  int i1=D1.intValue();
+  
+ 基本类型和字符串之间的转换
+ 基本类型转换成字符串
+ 包装类的tostring
+ float f1=100.00f;
+  Float F1=new float(f1);
+  F1.toString();
+  
+  字符串转换成基本类型
+  包装类的的parseXXX方法。
+  String MyNumber ="1234";
+	int MyInt = Integer.parseInt(MyNumber);
+ 
+
+    @Test
+    public void transFormTest() {
+        //自动转换 低-->高
+          short a = 10;
+          int b = a;
+        System.out.println("b:"+b);
+        //强制转换 丢失精度 高-->低
+        double c = 5.23;
+        float d = (float) c;
+
+        //利用包装类
+        double e = 5.8;
+        Double ee = new Double(e);
+        float eee = ee.floatValue();
+        int iii = ee.intValue();
+        long lll = ee.longValue();
+        Float fff = new Float(eee);
+        double dddd = fff.doubleValue();
+
+        //字符串-->基本类型转换
+        String  str = "850";
+        float fs = Float.parseFloat(str);
+        double ds = Double.parseDouble(str);
+
+        //基本类型-->字符串
+        String fsfs = new Float(fs).toString();
+
+    }

@@ -1,0 +1,102 @@
+package com.ecmoho.common.configuration;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.ibatis.type.BaseTypeHandler;
+import org.apache.ibatis.type.JdbcType;
+
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+typehander
+/**
+ * Created by Sonic Wang on 2018/8/1.
+ */
+public class JsonTypeHandler extends BaseTypeHandler<Object> {
+
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private Class<Object> clazz;
+
+    public JsonTypeHandler(Class<Object> clazz) {
+        if (clazz == null) throw new IllegalArgumentException("Type argument cannot be null");
+        this.clazz = clazz;
+    }
+
+    @Override
+    public void setNonNullParameter(PreparedStatement ps, int i, Object parameter, JdbcType jdbcType) throws SQLException {
+        ps.setString(i, this.toJson(parameter));
+    }
+
+    @Override
+    public Object getNullableResult(ResultSet rs, String columnName) throws SQLException {
+        return this.toObject(rs.getString(columnName), clazz);
+    }
+
+    @Override
+    public Object getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+        return this.toObject(rs.getString(columnIndex), clazz);
+    }
+
+    @Override
+    public Object getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+        return this.toObject(cs.getString(columnIndex), clazz);
+    }
+
+    private String toJson(Object object) {
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Object toObject(String content, Class<?> clazz) {
+        if (content != null && !content.isEmpty()) {
+            try {
+                return mapper.readValue(content, clazz);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    static {
+        mapper.configure(JsonParser.Feature.ALLOW_MISSING_VALUES, false);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
+}
+
+
+@Data
+@Table(name = "estimate")
+public class Estimate extends BaseEntity {
+
+    @ApiModelProperty(value = "采购单表id")
+    private String purchaseId;
+
+    @NotNull(message = "成本价不可为空！")
+    @ApiModelProperty(value = "成本价")
+    private Double costPrice;
+
+    @ApiModelProperty(value = "币种")
+    private String currency;
+
+    @ApiModelProperty(value = "利润测算旗舰店相关参数")
+    @ColumnType(typeHandler = JsonTypeHandler.class)
+    private StorePara storePara;
+
+    @ApiModelProperty(value = "利润测算经销相关参数")
+    @ColumnType(typeHandler = JsonTypeHandler.class)
+    private SellPara sellPara;
+
+    @ApiModelProperty(value = "利润测算采销相关参数")
+    @ColumnType(typeHandler = JsonTypeHandler.class)
+    private BuyPara buyPara;
+}
+
+这样就可以在存储和获取的时候将对应的对象转为json串，json串转为对象。

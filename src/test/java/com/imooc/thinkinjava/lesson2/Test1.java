@@ -14,11 +14,5 @@ public class Test1 {
 
     @Test
     public void test1(){
-        char a;
-        int i;
-        long j;
-        System.out.println( i);
-        System.out.println(j);
-        System.out.println(a);
     }
 }

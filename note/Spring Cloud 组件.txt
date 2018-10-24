@@ -1,18 +1,79 @@
-1.Spring Could Zuul ¾ÍÊÇ×öµ½ÇëÇó×ª·¢£¬ÇëÇó¾ßÌåµÄ·şÎñÊµÀı£¬²»Ö±½Ó·ÃÎÊÊµÀı£¬¶øÊÇÍ¨¹ı·ÃÎÊÂ·ÓÉ£¬ÔÚÂ·ÓÉÖĞ½¨Á¢Ó³Éä¹æÔò£¬½«ÇëÇó×ª·¢¶¼¶ÔÓ¦µÄÊµÀıÖĞ¡£
+1.Spring Could Zuul 
+¹¦ÄÜ£º¾ÍÊÇ×öµ½ÇëÇó×ª·¢£¬ÇëÇó¾ßÌåµÄ·şÎñÊµÀı£¬²»Ö±½Ó·ÃÎÊÊµÀı£¬¶øÊÇÍ¨¹ı·ÃÎÊÂ·ÓÉ£¬ÔÚÂ·ÓÉÖĞ½¨Á¢Ó³Éä¹æÔò£¬½«ÇëÇó×ª·¢¶¼¶ÔÓ¦µÄÊµÀıÖĞ¡£
 ÔÚÂ·ÓÉÖĞ¿ÉÒÔ×öÒ»Ğ©Ğ£Ñé¹¤×÷£¬Í¨¹ı½«Â·ÓÉ×¢²áµ½·şÎñÖĞĞÄ£¬¿ÉÒÔ»ñµÃ·şÎñµÄÃû³Æ£¬Â·ÓÉ¹æÔòÖ±½ÓÓ³Éä¶ÔÓ¦µÄ·şÎñÃû¼´¿É¡£
 
-Í¨¹ıÂ·ÓÉÇëÇóproduct-serviceµÄgetAllProductHasCode
+´´½¨ÏîÄ¿
+1)ÒÀÀµ
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zuul</artifactId>
+        </dependency>
+2)Æô¶¯Àà¼Ó×¢½â
+@EnableZuulProxy
 
+3)ÅäÖÃÎÄ¼ş
+ÅäÖÃ·şÎñÖĞĞÄ
+hystrix
+feign
+×ª·¢¹æÔò
+
+Í¨¹ıÂ·ÓÉÇëÇóproduct-serviceµÄgetAllProductHasCode
 http://192.168.1.132:1003/product-service/product/product/getAllProductHasCode?inUse=true
 Ïàµ±ÓÚlocalhost:7001/product/product/getAllProductHasCode?inUse=true
 
-2.eureka
+4)Â·ÓÉ»¹ÄÜÅäÖÃ¹ıÂËĞÅÏ¢£¬ÓÃ×Ô¶¨ÒåfilterÀ´ÊµÏÖ£¬¼Ì³ĞZuulFilter¡£
 
+ÇëÇó·¢µ½Â·ÓÉ·şÎñÆ÷ÉÏ£¬ÓÉÂ·ÓÉ·şÎñÆ÷¸ù¾İ¹ıÂËÌõ¼ş½øĞĞ¹ıÂË
+
+2.Spring Could eureka
+¹¦ÄÜ: ·şÎñ×¢²áÖĞĞÄ
+´´½¨·şÎñ¶ËÏîÄ¿
+1)ÒÀÀµ
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+2)Æô¶¯Àà¼Ó×¢½â
+@EnableEurekaServer
+
+3) ÅäÖÃ·şÎñµØÖ·ºÍ²ÎÊı
+eureka:
+  server:
+    enableSelfPreservation: true
+    eviction-interval-timer-in-ms: 15000
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    registry-fetch-interval-seconds: 5
+    serviceUrl:
+      defaultZone: http://localhost:${server.port}/eureka/
+
+4)ÆäËû·şÎñ¶ËÒıÈëjar£¬²¢Ö¸¶¨·şÎñ×¢²áÖĞĞÄµØÖ·¼´¿É¡£
+	  
 3.spring config 
-´´½¨Ò»¸ö config-service µÄ·şÎñ¶Ë£¬ÅäÖÃÎÄ¼şÖĞÖ¸¶¨²Ö¿âµÄgit µØÖ·£¬HTTPÁ¬½ÓĞèÒªÕË»§ÃÜÂë£¬sshĞèÒªÃØÔ¿
-ÒıÓÃspring-cloud-config-server ÒÀÀµ¡£Æô¶¯ÀàÖĞ¼ÓÈëEnableConfigServer.
+¹¦ÄÜ:·Ö²¼Ê½ÅäÖÃÖĞĞÄ
 
-ÆäËû·şÎñÒªÊ¹ÓÃ²Ö¿âÅäÖÃĞèÒªÒıÈëspring-cloud-starter-config£¬È»ºóÊ¹ÓÃbootstrap.yml ÅäÖÃÎÄ¼ş
+´´½¨ÅäÖÃÅäÖÃÖĞĞÄ·şÎñ¶Ë
+1)ÒÀÀµ
+       <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-server</artifactId>
+        </dependency>
+2)Æô¶¯Àà¼Ó×¢½â
+@EnableConfigServer
+
+3) ÅäÖÃ·şÎñµØÖ·ºÍ²ÎÊı
+  cloud:
+    config:
+      server:
+        git:
+#          basedir: /data/project/config-server
+          cloneOnStart: true
+          uri: git@192.168.1.138:wangwei/ecmoho-config-repo.git
+          searchPaths: '{application}'
+Ö¸¶¨Git²Ö¿â£¬Èç¹ûÊÇHTTPÁ¬½ÓĞèÒªÕË»§ÃÜÂë£¬sshĞèÒªÃØÔ¿
+
+4)ÆäËû·şÎñÒªÊ¹ÓÃ²Ö¿âÅäÖÃĞèÒªÒıÈëspring-cloud-starter-config£¬È»ºóÊ¹ÓÃbootstrap.yml ÅäÖÃÎÄ¼ş
 ÅäÖÃ spring:
   cloud:
     config:
@@ -20,7 +81,7 @@ http://192.168.1.132:1003/product-service/product/product/getAllProductHasCode?i
       name: ${spring.application.name}// ÅäÖÃÎÄ¼şµÄ·şÎñÃû
       profile: ${spring.profiles.active}//ÅäÖÃÎÄ¼şµÄÉúĞ§ÎÄ¼ş
 
-»ùÓÚ·şÎñ»¯ÅäÖÃ
+5)»ùÓÚ·şÎñ»¯ÅäÖÃ
 ¿Í»§¶Ë²»Í¨¹ı ip ·ÃÎÊ·şÎñ¶Ë£¬¶øÊÇÀûÓÃ·şÎñ·şÎñ×¢²áÖĞĞÄ£¬Ö±½Ó·ÃÎÊconfig service µÄ·şÎñÃû£¬ÔÙ¸ù¾İÅäÖÃ»ñÈ¡ ¶ÔÓ¦µÄÅäÖÃÎÄ¼ş¡£
 config service  Æô¶¯Àà¼Ó×¢½â @EnableDiscoveryClient ÒªÖ¸¶¨·şÎñ×¢²áÖĞĞÄ£¬½«×Ô¼º×¢²áÆğÀ´¡£
  
@@ -37,23 +98,24 @@ refresh ¶¯Ì¬Ë¢ĞÂÅäÖÃ ĞèÒªÔÚ¿Í»§¶ËÌí¼Óactuator jar °ü£¬±©Â¶refresh¶Ë¿Ú¡£ĞŞ¸ÄÅäÖÃÖ
 ×¢ÒâÒªË¢ĞÂµÄÊÇ¿Í»§¶Ë£¬¼´ÄÄ¸ö¿Í»§¶Ë»ñÈ¡ÅäÖÃĞÅÏ¢£¬Ë¢ĞÂÄÇ¸ö¿Í»§¶Ë¡£
 
 4.spring cloud bus ÏûÏ¢×ÜÏß 
+ÕûºÏÏûÏ¢ÖĞ¼ä¼ş
 
-1£©springboot ÕûºÏ rabbitmq
+springboot ÕûºÏ rabbitmq
 ÒıÈëspring-boot-starter-amqp
 
-2)spring cloud bus ÊµÏÖ¶¯Ì¬Ë¢ĞÂconfigµÄÅäÖÃÎÄ¼ş
+spring cloud bus ÊµÏÖ¶¯Ì¬Ë¢ĞÂconfigµÄÅäÖÃÎÄ¼ş
 ÕûºÏrabbitmq
 1)°²×°rabbitmq
-2)ËùÓÃ ¿Í»§¶Ë ÒıÈëspring-cloud-starter-bus-amqp,spring-cloud-starter-actuator
-ËùÓÃ ¿Í»§¶Ë
-3)¿Í»§¶ËµÄÅäÖÃÎÄ¼şÖĞ¼ÓÈërabbitmqµÄµÇÂ½Á¬½ÓĞÅÏ¢¡£
+2)ËùÓĞ¿Í»§¶Ë ÒıÈëspring-cloud-starter-bus-amqp,spring-cloud-starter-actuator
 
-springcould ×Ô¶¯ÅäÖÃÊµÏÖÁË×Ô¶¯ÊôĞÔ¡£
+3)ËùÓĞ¿Í»§¶ËµÄÅäÖÃÎÄ¼şÖĞ¼ÓÈërabbitmqµÄµÇÂ½Á¬½ÓĞÅÏ¢¡£
+
+4)springcould ×Ô¶¯ÅäÖÃÊµÏÖÁË×Ô¶¯ÊôĞÔ¡£
 
 µ±ĞŞ¸ÄÅäÖÃÎÄ¼şºó£¬Ò»¸öÊµÀı»á×Ô¶¯´¥·¢refreshË¢ĞÂÅäÖÃ£¬È»ºó½«ÏûÏ¢ÍÆËÍµ½ÏûÏ¢×ÜÏßÉÏ¡£
 ÆäËû·şÎñÊµÀıÁ¬½ÓÔÚÏûÏ¢×ÜÏßÉÏ£¬»á»ñµÃË¢ĞÂÏûÏ¢£¬»ñÈ¡¸üĞÂÅäÖÃ¡£
 
-ÓÅ»¯
+5)ÓÅ»¯
 config-service ÖĞÍ¬ÑùÅäÖÃamqp , ÅäÖÃÁ¬½ÓĞÅÏ¢¡£µ±ĞŞ¸ÄÊ±ÓÉÅäÖÃÖĞĞÄÀ´Ë¢ĞÂ£¬ÆäËûÊµÀı»ñÈ¡¸üĞÂ¡£
 
 5.spring cloud Óë ZipkinÕûºÏ
